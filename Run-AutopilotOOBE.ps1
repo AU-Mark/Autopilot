@@ -1,18 +1,18 @@
 <#
-	.SYNOPSIS
+    .SYNOPSIS
     Installs the required modules and launches the AutopilotOOBE module with the parameters defined in this script
 
-	.DESCRIPTION
-	This is a wrapper around the AutopilotOOBE module that allows specifying the parameters used to configure it
+    .DESCRIPTION
+    This is a wrapper around the AutopilotOOBE module that allows specifying the parameters used to configure it
     without having to dump a json to $env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json that would get left
     on the PC after provisioning.
 
     Info about the AutopilotOOBE module can be found here: https://autopilotoobe.osdeploy.com/parameters/reference
   
-	.INPUTS
+    .INPUTS
     None
 
-	.OUTPUTS
+    .OUTPUTS
     .None
 
     .EXAMPLE
@@ -21,7 +21,7 @@
 
     irm https://tinyurl.com/AU-Autopilot | iex
 
-	.NOTES
+    .NOTES
     Version:        1.0
     Author:         Mark Newton
     Creation Date:  07/02/2024
