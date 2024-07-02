@@ -1,3 +1,5 @@
+# irm https://t.ly/l7ryO | iex
+
 ##############################################################################################################
 #                                                Functions                                                   #
 ##############################################################################################################
@@ -286,7 +288,7 @@ try {
         Docs = 'https://autopilotoobe.osdeploy.com/'
     }
     ForEach ($Param in $Params.Keys) {
-        Write-Color -Test "$($Param): $($Params[$Param])"
+        Write-Color -Text "$($Param): $($Params[$Param])"
     }
 
     AutopilotOOBE @Params
