@@ -1,4 +1,34 @@
-# irm https://t.ly/l7ryO | iex
+<#
+	.SYNOPSIS
+    Installs the required modules and launches the AutopilotOOBE module with the parameters defined in this script
+
+	.DESCRIPTION
+	This is a wrapper around the AutopilotOOBE module that allows specifying the parameters used to configure it
+    without having to dump a json to $env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json that would get left
+    on the PC after provisioning.
+
+    Info about the AutopilotOOBE module can be found here: https://autopilotoobe.osdeploy.com/parameters/reference
+  
+	.INPUTS
+    None
+
+	.OUTPUTS
+    .None
+
+    .EXAMPLE
+    The below URL will launch this script on the PC without having to do anything else. It loads the raw github
+    of this script from: https://github.com/AU-Mark/Autopilot/blob/main/Run-AutopilotOOBE.ps1
+
+    irm https://tinyurl.com/AU-Autopilot | iex
+
+	.NOTES
+    Version:        1.0
+    Author:         Mark Newton
+    Creation Date:  07/02/2024
+    Purpose/Change: Initial script development
+	
+	#>
+
 
 ##############################################################################################################
 #                                                Functions                                                   #
@@ -256,8 +286,25 @@ function Write-Color {
 ##############################################################################################################
 #                                                   Main                                                     #
 ##############################################################################################################
-
 try {
+    Clear-Host
+	Write-Color -Text "__________________________________________________________________________________________" -Color White -BackgroundColor Black -HorizontalCenter $True
+	Write-Color -Text "|                                                                                          |" -Color White -BackgroundColor Black -HorizontalCenter $True
+	Write-Color -Text "|","                                            .-.                                           ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","                                            -#-              -.    -+                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","    ....           .       ...      ...     -#-  .          =#:..  .:      ...      ..    ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","   +===*#-  ",".:","     #*  *#++==*#:   +===**:  -#- .#*    -#- =*#+++. +#.  -*+==+*. .*+-=*.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","    .::.+#  ",".:","     #*  *#    .#+   .::..**  -#-  .#+  -#=   =#:    +#. =#:       :#+:     ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","  =#=--=##. ",".:","     #*  *#     #+  **---=##  -#-   .#+-#=    =#:    +#. **          :=**.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","  **.  .*#. ",".:.","   =#=  *#     #+ :#=   :##  -#-    :##=     -#-    +#. :#*:  .:  ::  .#=  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","   -+++--=      .==:   ==     =-  .=++=-==  :=:    .#=       -++=  -=    :=+++-. :=++=-   ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","                                                  .#+                                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|","                                                  *+                                      ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+	Write-Color -Text "|__________________________________________________________________________________________|" -Color White -BackgroundColor Black -HorizontalCenter $True
+	Write-Color -Text "Script: ","AutopilotOOBE Prep" -Color Yellow,White -HorizontalCenter $True -LinesBefore 1
+	Write-Color -Text "Author: " ,"Mark Newton" -Color Yellow,White -HorizontalCenter $True -LinesAfter 1
+    Write-Color -Text "Note: " ,"You can use Alt+Tab to switch to windows that get hidden behind OOBE" -Color Red,White -HorizontalCenter $True -LinesAfter 1
+
     Write-Color -Text "Preparing device for AutopilotOOBE" -Color White -ShowTime
     # Set the PSGallery to trusted to automate installing modules
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
@@ -275,34 +322,44 @@ try {
     Import-Module 'AutopilotOOBE'
 
     Write-Color -Text "Starting AutopilotOOBE with configured parameters:" -Color White -ShowTime
+    # Parameters to run AutopilotOOBE GUI with pre-filled fields
     $Params = @{
         Title = 'Aunalytics Autopilot Registration'
         AssignedUserExample = 'username@aunalytics.com'
         AddToGroup = 'AzPC-ENR-Enterprise'
+        AddToGroupOptions = 'AzPC-ENR-Enterprise','AzPC-ENR-Kiosk','AzPC-ENR-Shared'
         GroupTag = 'Enterprise'
         GroupTagOptions = 'Enterprise','Kiosk','Shared'
         AssignedComputerNameExample = 'NB-W11P-####'
         PostAction = 'Restart'
         Assign = $true
-        Run = 'NetworkingWireless'
+        Run = 'WindowsSettings'
         Docs = 'https://autopilotoobe.osdeploy.com/'
     }
+
+    # Print the configured parameters to the screen
     ForEach ($Param in $Params.Keys) {
-        Write-Color -Text "$($Param): $($Params[$Param])"
+        Write-Color -Text "$($Param): ","$($Params[$Param])" -Color Yellow,White -ShowTime
     }
 
+    Write-Color -Text " "
+
+    # Sleep for 1 second so the parameters can actually be seen
+    Start-Sleep 1
+
+    # Run the AutopilotOOBE module with the configured parameters
     AutopilotOOBE @Params
 } catch {
     Write-Color -Text "Err Line: ","$($_.InvocationInfo.ScriptLineNumber)"," Err Name: ","$($_.Exception.GetType().FullName) "," Err Msg: ","$($_.Exception.Message)" -Color Red,Magenta,Red,Magenta,Red,Magenta -ShowTime
 } finally {
     try {
-        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Untrusted
-        Remove-Module -Name 'Microsoft.Graph.Groups' -Force > $Null
-        Remove-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force > $Null
-        Remove-Module -Name 'AutopilotOOBE' -Force > $Null
-        Uninstall-Module -Name 'Microsoft.Graph.Groups' -Force > $Null
-        Uninstall-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force > $Null
-        Uninstall-Module -Name 'AutopilotOOBE' -Force > $Null
+        Remove-Module -Name 'AutopilotOOBE' -Force -ErrorAction SilentlyContinue | Out-Null
+        Remove-Module -Name 'Microsoft.Graph.Groups' -Force -ErrorAction SilentlyContinue | Out-Null
+        Remove-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force -ErrorAction SilentlyContinue | Out-Null
+        Uninstall-Module -Name 'AutopilotOOBE' -Force -ErrorAction SilentlyContinue | Out-Null
+        Uninstall-Module -Name 'Microsoft.Graph.Groups' -Force -ErrorAction SilentlyContinue | Out-Null
+        Uninstall-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force -ErrorAction SilentlyContinue | Out-Null
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Untrusted -ErrorAction SilentlyContinue | Out-Null
     } catch {
         # Do nothing
     }
