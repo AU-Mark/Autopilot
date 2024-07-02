@@ -26,7 +26,7 @@
     Author:         Mark Newton
     Creation Date:  07/02/2024
     Purpose/Change: Initial script development
-	
+    
     #>
 
 
@@ -35,7 +35,7 @@
 ##############################################################################################################
 
 function Write-Color {
-	<#
+    <#
     .SYNOPSIS
     Write-Color is a wrapper around Write-Host delivering a lot of additional features for easier color options.
 
@@ -145,142 +145,142 @@ function Write-Color {
     Original idea: Josh (https://stackoverflow.com/users/81769/josh)
 
     #>
-	[Alias('Write-Colour')]
-	[CmdletBinding()]
-	param(
-		[Alias('T')] [String[]]$Text,
-		[Alias('C','ForegroundColor','FGC')] [ConsoleColor[]]$Color = [ConsoleColor]::White,
-		[Alias('B','BGC')] [ConsoleColor[]]$BackGroundColor = $null,
-		[bool]$VerticalCenter = $False,
-		[bool]$HorizontalCenter = $False,
-		[Alias('Indent')] [int]$StartTab = 0,
-		[int]$LinesBefore = 0,
-		[int]$LinesAfter = 0,
-		[int]$StartSpaces = 0,
-		[Alias('L')] [string]$LogFile = '',
-		[Alias('DateFormat','TimeFormat')] [string]$DateTimeFormat = 'yyyy-MM-dd HH:mm:ss',
-		[Alias('LogTimeStamp')] [bool]$LogTime = $true,
-		[int]$LogRetry = 2,
-		[ValidateSet('unknown','string','unicode','bigendianunicode','utf8','utf7','utf32','ascii','default','oem')] [string]$Encoding = 'Unicode',
-		[switch]$ShowTime,
-		[switch]$NoNewLine,
-		[Alias('HideConsole')] [switch]$NoConsoleOutput
-	)
-	if (-not $NoConsoleOutput) {
-		$DefaultColor = $Color[0]
-		if ($null -ne $BackGroundColor -and $BackGroundColor.Count -ne $Color.Count) {
-			Write-Error "Colors, BackGroundColors parameters count doesn't match. Terminated."
-			return
-		}
-		if ($VerticalCenter) {
-			for ($i = 0; $i -lt ([math]::Max(0,$Host.UI.RawUI.BufferSize.Height / 4)); $i++) {
-				Write-Host -Object "`n" -NoNewline
-			}
-		} # Center the output vertically according to the powershell window size
-		if ($LinesBefore -ne 0) {
-			for ($i = 0; $i -lt $LinesBefore; $i++) {
-				Write-Host -Object "`n" -NoNewline
-			}
-		} # Add empty line before
-		if ($HorizontalCenter) {
-			$MessageLength = 0
-			foreach ($Value in $Text) {
-				$MessageLength += $Value.Length
-			}
-			Write-Host ("{0}" -f (' ' * ([math]::Max(0,$Host.UI.RawUI.BufferSize.Width / 2) - [math]::Floor($MessageLength / 2)))) -NoNewline
-		} # Center the line horizontally according to the powershell window size
-		if ($StartTab -ne 0) {
-			for ($i = 0; $i -lt $StartTab; $i++) {
-				Write-Host -Object "`t" -NoNewline
-			}
-		} # Add TABS before text
+    [Alias('Write-Colour')]
+    [CmdletBinding()]
+    param(
+        [Alias('T')] [String[]]$Text,
+        [Alias('C','ForegroundColor','FGC')] [ConsoleColor[]]$Color = [ConsoleColor]::White,
+        [Alias('B','BGC')] [ConsoleColor[]]$BackGroundColor = $null,
+        [bool]$VerticalCenter = $False,
+        [bool]$HorizontalCenter = $False,
+        [Alias('Indent')] [int]$StartTab = 0,
+        [int]$LinesBefore = 0,
+        [int]$LinesAfter = 0,
+        [int]$StartSpaces = 0,
+        [Alias('L')] [string]$LogFile = '',
+        [Alias('DateFormat','TimeFormat')] [string]$DateTimeFormat = 'yyyy-MM-dd HH:mm:ss',
+        [Alias('LogTimeStamp')] [bool]$LogTime = $true,
+        [int]$LogRetry = 2,
+        [ValidateSet('unknown','string','unicode','bigendianunicode','utf8','utf7','utf32','ascii','default','oem')] [string]$Encoding = 'Unicode',
+        [switch]$ShowTime,
+        [switch]$NoNewLine,
+        [Alias('HideConsole')] [switch]$NoConsoleOutput
+    )
+    if (-not $NoConsoleOutput) {
+        $DefaultColor = $Color[0]
+        if ($null -ne $BackGroundColor -and $BackGroundColor.Count -ne $Color.Count) {
+            Write-Error "Colors, BackGroundColors parameters count doesn't match. Terminated."
+            return
+        }
+        if ($VerticalCenter) {
+            for ($i = 0; $i -lt ([math]::Max(0,$Host.UI.RawUI.BufferSize.Height / 4)); $i++) {
+                Write-Host -Object "`n" -NoNewline
+            }
+        } # Center the output vertically according to the powershell window size
+        if ($LinesBefore -ne 0) {
+            for ($i = 0; $i -lt $LinesBefore; $i++) {
+                Write-Host -Object "`n" -NoNewline
+            }
+        } # Add empty line before
+        if ($HorizontalCenter) {
+            $MessageLength = 0
+            foreach ($Value in $Text) {
+                $MessageLength += $Value.Length
+            }
+            Write-Host ("{0}" -f (' ' * ([math]::Max(0,$Host.UI.RawUI.BufferSize.Width / 2) - [math]::Floor($MessageLength / 2)))) -NoNewline
+        } # Center the line horizontally according to the powershell window size
+        if ($StartTab -ne 0) {
+            for ($i = 0; $i -lt $StartTab; $i++) {
+                Write-Host -Object "`t" -NoNewline
+            }
+        } # Add TABS before text
 
-		if ($StartSpaces -ne 0) {
-			for ($i = 0; $i -lt $StartSpaces; $i++) {
-				Write-Host -Object ' ' -NoNewline
-			}
-		} # Add SPACES before text
-		if ($ShowTime) {
-			Write-Host -Object "[$([datetime]::Now.ToString($DateTimeFormat))] " -NoNewline -ForegroundColor DarkGray
-		} # Add Time before output
-		if ($Text.Count -ne 0) {
-			if ($Color.Count -ge $Text.Count) {
-				# the real deal coloring
-				if ($null -eq $BackGroundColor) {
-					for ($i = 0; $i -lt $Text.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -NoNewline
+        if ($StartSpaces -ne 0) {
+            for ($i = 0; $i -lt $StartSpaces; $i++) {
+                Write-Host -Object ' ' -NoNewline
+            }
+        } # Add SPACES before text
+        if ($ShowTime) {
+            Write-Host -Object "[$([datetime]::Now.ToString($DateTimeFormat))] " -NoNewline -ForegroundColor DarkGray
+        } # Add Time before output
+        if ($Text.Count -ne 0) {
+            if ($Color.Count -ge $Text.Count) {
+                # the real deal coloring
+                if ($null -eq $BackGroundColor) {
+                    for ($i = 0; $i -lt $Text.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -NoNewline
 
-					}
-				} else {
-					for ($i = 0; $i -lt $Text.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -BackgroundColor $BackGroundColor[$i] -NoNewline
+                    }
+                } else {
+                    for ($i = 0; $i -lt $Text.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -BackgroundColor $BackGroundColor[$i] -NoNewline
 
-					}
-				}
-			} else {
-				if ($null -eq $BackGroundColor) {
-					for ($i = 0; $i -lt $Color.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -NoNewline
+                    }
+                }
+            } else {
+                if ($null -eq $BackGroundColor) {
+                    for ($i = 0; $i -lt $Color.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -NoNewline
 
-					}
-					for ($i = $Color.Length; $i -lt $Text.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $DefaultColor -NoNewline
+                    }
+                    for ($i = $Color.Length; $i -lt $Text.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $DefaultColor -NoNewline
 
-					}
-				}
-				else {
-					for ($i = 0; $i -lt $Color.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -BackgroundColor $BackGroundColor[$i] -NoNewline
+                    }
+                }
+                else {
+                    for ($i = 0; $i -lt $Color.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $Color[$i] -BackgroundColor $BackGroundColor[$i] -NoNewline
 
-					}
-					for ($i = $Color.Length; $i -lt $Text.Length; $i++) {
-						Write-Host -Object $Text[$i] -ForegroundColor $DefaultColor -BackgroundColor $BackGroundColor[0] -NoNewline
+                    }
+                    for ($i = $Color.Length; $i -lt $Text.Length; $i++) {
+                        Write-Host -Object $Text[$i] -ForegroundColor $DefaultColor -BackgroundColor $BackGroundColor[0] -NoNewline
 
-					}
-				}
-			}
-		}
-		if ($NoNewLine -eq $true) {
-			Write-Host -NoNewline
-		}
-		else {
-			Write-Host
-		} # Support for no new line
-		if ($LinesAfter -ne 0) {
-			for ($i = 0; $i -lt $LinesAfter; $i++) {
-				Write-Host -Object "`n" -NoNewline
-			}
-		} # Add empty line after
-	}
-	if ($Text.Count -and $LogFile) {
-		# Save to file
-		$TextToFile = ""
-		for ($i = 0; $i -lt $Text.Length; $i++) {
-			$TextToFile += $Text[$i]
-		}
-		$Saved = $false
-		$Retry = 0
-		do {
-			$Retry++
-			try {
-				if ($LogTime) {
-					"[$([datetime]::Now.ToString($DateTimeFormat))] $TextToFile" | Out-File -FilePath $LogFile -Encoding $Encoding -Append -ErrorAction Stop -WhatIf:$false
-				}
-				else {
-					"$TextToFile" | Out-File -FilePath $LogFile -Encoding $Encoding -Append -ErrorAction Stop -WhatIf:$false
-				}
-				$Saved = $true
-			}
-			catch {
-				if ($Saved -eq $false -and $Retry -eq $LogRetry) {
-					Write-Warning "Write-Color - Couldn't write to log file $($_.Exception.Message). Tried ($Retry/$LogRetry))"
-				}
-				else {
-					Write-Warning "Write-Color - Couldn't write to log file $($_.Exception.Message). Retrying... ($Retry/$LogRetry)"
-				}
-			}
-		} until ($Saved -eq $true -or $Retry -ge $LogRetry)
-	}
+                    }
+                }
+            }
+        }
+        if ($NoNewLine -eq $true) {
+            Write-Host -NoNewline
+        }
+        else {
+            Write-Host
+        } # Support for no new line
+        if ($LinesAfter -ne 0) {
+            for ($i = 0; $i -lt $LinesAfter; $i++) {
+                Write-Host -Object "`n" -NoNewline
+            }
+        } # Add empty line after
+    }
+    if ($Text.Count -and $LogFile) {
+        # Save to file
+        $TextToFile = ""
+        for ($i = 0; $i -lt $Text.Length; $i++) {
+            $TextToFile += $Text[$i]
+        }
+        $Saved = $false
+        $Retry = 0
+        do {
+            $Retry++
+            try {
+                if ($LogTime) {
+                    "[$([datetime]::Now.ToString($DateTimeFormat))] $TextToFile" | Out-File -FilePath $LogFile -Encoding $Encoding -Append -ErrorAction Stop -WhatIf:$false
+                }
+                else {
+                    "$TextToFile" | Out-File -FilePath $LogFile -Encoding $Encoding -Append -ErrorAction Stop -WhatIf:$false
+                }
+                $Saved = $true
+            }
+            catch {
+                if ($Saved -eq $false -and $Retry -eq $LogRetry) {
+                    Write-Warning "Write-Color - Couldn't write to log file $($_.Exception.Message). Tried ($Retry/$LogRetry))"
+                }
+                else {
+                    Write-Warning "Write-Color - Couldn't write to log file $($_.Exception.Message). Retrying... ($Retry/$LogRetry)"
+                }
+            }
+        } until ($Saved -eq $true -or $Retry -ge $LogRetry)
+    }
 }
 
 ##############################################################################################################
@@ -288,21 +288,21 @@ function Write-Color {
 ##############################################################################################################
 try {
     Clear-Host
-	Write-Color -Text "__________________________________________________________________________________________" -Color White -BackgroundColor Black -HorizontalCenter $True
-	Write-Color -Text "|                                                                                          |" -Color White -BackgroundColor Black -HorizontalCenter $True
-	Write-Color -Text "|","                                            .-.                                           ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","                                            -#-              -.    -+                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","    ....           .       ...      ...     -#-  .          =#:..  .:      ...      ..    ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","   +===*#-  ",".:","     #*  *#++==*#:   +===**:  -#- .#*    -#- =*#+++. +#.  -*+==+*. .*+-=*.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","    .::.+#  ",".:","     #*  *#    .#+   .::..**  -#-  .#+  -#=   =#:    +#. =#:       :#+:     ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","  =#=--=##. ",".:","     #*  *#     #+  **---=##  -#-   .#+-#=    =#:    +#. **          :=**.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","  **.  .*#. ",".:.","   =#=  *#     #+ :#=   :##  -#-    :##=     -#-    +#. :#*:  .:  ::  .#=  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","   -+++--=      .==:   ==     =-  .=++=-==  :=:    .#=       -++=  -=    :=+++-. :=++=-   ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","                                                  .#+                                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|","                                                  *+                                      ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-	Write-Color -Text "|__________________________________________________________________________________________|" -Color White -BackgroundColor Black -HorizontalCenter $True
-	Write-Color -Text "Script: ","AutopilotOOBE Prep" -Color Yellow,White -HorizontalCenter $True -LinesBefore 1
-	Write-Color -Text "Author: " ,"Mark Newton" -Color Yellow,White -HorizontalCenter $True -LinesAfter 1
+    Write-Color -Text "__________________________________________________________________________________________" -Color White -BackgroundColor Black -HorizontalCenter $True
+    Write-Color -Text "|                                                                                          |" -Color White -BackgroundColor Black -HorizontalCenter $True
+    Write-Color -Text "|","                                            .-.                                           ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","                                            -#-              -.    -+                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","    ....           .       ...      ...     -#-  .          =#:..  .:      ...      ..    ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","   +===*#-  ",".:","     #*  *#++==*#:   +===**:  -#- .#*    -#- =*#+++. +#.  -*+==+*. .*+-=*.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","    .::.+#  ",".:","     #*  *#    .#+   .::..**  -#-  .#+  -#=   =#:    +#. =#:       :#+:     ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","  =#=--=##. ",".:","     #*  *#     #+  **---=##  -#-   .#+-#=    =#:    +#. **          :=**.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","  **.  .*#. ",".:.","   =#=  *#     #+ :#=   :##  -#-    :##=     -#-    +#. :#*:  .:  ::  .#=  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","   -+++--=      .==:   ==     =-  .=++=-==  :=:    .#=       -++=  -=    :=+++-. :=++=-   ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","                                                  .#+                                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|","                                                  *+                                      ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
+    Write-Color -Text "|__________________________________________________________________________________________|" -Color White -BackgroundColor Black -HorizontalCenter $True
+    Write-Color -Text "Script: ","AutopilotOOBE Prep" -Color Yellow,White -HorizontalCenter $True -LinesBefore 1
+    Write-Color -Text "Author: " ,"Mark Newton" -Color Yellow,White -HorizontalCenter $True -LinesAfter 1
     Write-Color -Text "Note: " ,"You can use Alt+Tab to switch to windows that get hidden behind OOBE" -Color Red,White -HorizontalCenter $True -LinesAfter 1
 
     Write-Color -Text "Preparing device for AutopilotOOBE" -Color White -ShowTime
