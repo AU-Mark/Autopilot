@@ -306,6 +306,10 @@ try {
     Write-Color -Text "Note: " ,"You can use Alt+Tab to switch to windows that get hidden behind OOBE" -Color Red,White -HorizontalCenter $True -LinesAfter 1
 
     Write-Color -Text "Preparing device for AutopilotOOBE" -Color White -ShowTime
+
+    # Set execution policy to Unrestricted for this script to run. It will be reverted back to RemoteSigned when the script exits
+    Set-ExecutionPolicy Unrestricted -Force
+
     # Set the PSGallery to trusted to automate installing modules
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 
@@ -327,7 +331,7 @@ try {
         Title = 'Aunalytics Autopilot Registration'
         AssignedUserExample = 'username@aunalytics.com'
         AddToGroup = 'AzPC-ENR-Enterprise'
-        AddToGroupOptions = 'AzPC-ENR-Enterprise','AzPC-ENR-Kiosk','AzPC-ENR-Shared'
+        AddToGroupOptions = 'AzPC - ENR - Enterprise','AzPC - ENR - Kiosk','AzPC - ENR - Shared'
         GroupTag = 'Enterprise'
         GroupTagOptions = 'Enterprise','Kiosk','Shared'
         AssignedComputerNameExample = 'NB-W11P-####'
@@ -353,13 +357,8 @@ try {
     Write-Color -Text "Err Line: ","$($_.InvocationInfo.ScriptLineNumber)"," Err Name: ","$($_.Exception.GetType().FullName) "," Err Msg: ","$($_.Exception.Message)" -Color Red,Magenta,Red,Magenta,Red,Magenta -ShowTime
 } finally {
     try {
-        Remove-Module -Name 'AutopilotOOBE' -Force -ErrorAction SilentlyContinue | Out-Null
-        Remove-Module -Name 'Microsoft.Graph.Groups' -Force -ErrorAction SilentlyContinue | Out-Null
-        Remove-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force -ErrorAction SilentlyContinue | Out-Null
-        Uninstall-Module -Name 'AutopilotOOBE' -Force -ErrorAction SilentlyContinue | Out-Null
-        Uninstall-Module -Name 'Microsoft.Graph.Groups' -Force -ErrorAction SilentlyContinue | Out-Null
-        Uninstall-Module -Name 'Microsoft.Graph.Identity.DirectoryManagement' -Force -ErrorAction SilentlyContinue | Out-Null
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy Untrusted -ErrorAction SilentlyContinue | Out-Null
+        Set-ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue | Out-Null
     } catch {
         # Do nothing
     }
