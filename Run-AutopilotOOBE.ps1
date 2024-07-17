@@ -151,8 +151,7 @@ function Write-Color {
         [Alias('T')] [String[]]$Text,
         [Alias('C','ForegroundColor','FGC')] [ConsoleColor[]]$Color = [ConsoleColor]::White,
         [Alias('B','BGC')] [ConsoleColor[]]$BackGroundColor = $null,
-        [bool]$VerticalCenter = $False,
-        [bool]$HorizontalCenter = $False,
+        [bool]$Center = $False,
         [Alias('Indent')] [int]$StartTab = 0,
         [int]$LinesBefore = 0,
         [int]$LinesAfter = 0,
@@ -172,17 +171,12 @@ function Write-Color {
             Write-Error "Colors, BackGroundColors parameters count doesn't match. Terminated."
             return
         }
-        if ($VerticalCenter) {
-            for ($i = 0; $i -lt ([math]::Max(0,$Host.UI.RawUI.BufferSize.Height / 4)); $i++) {
-                Write-Host -Object "`n" -NoNewline
-            }
-        } # Center the output vertically according to the powershell window size
         if ($LinesBefore -ne 0) {
             for ($i = 0; $i -lt $LinesBefore; $i++) {
                 Write-Host -Object "`n" -NoNewline
             }
         } # Add empty line before
-        if ($HorizontalCenter) {
+        if ($Center) {
             $MessageLength = 0
             foreach ($Value in $Text) {
                 $MessageLength += $Value.Length
@@ -288,22 +282,22 @@ function Write-Color {
 ##############################################################################################################
 try {
     Clear-Host
-    Write-Color -Text "__________________________________________________________________________________________" -Color White -BackgroundColor Black -HorizontalCenter $True
-    Write-Color -Text "|                                                                                          |" -Color White -BackgroundColor Black -HorizontalCenter $True
-    Write-Color -Text "|","                                            .-.                                           ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","                                            -#-              -.    -+                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","    ....           .       ...      ...     -#-  .          =#:..  .:      ...      ..    ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","   +===*#-  ",".:","     #*  *#++==*#:   +===**:  -#- .#*    -#- =*#+++. +#.  -*+==+*. .*+-=*.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","    .::.+#  ",".:","     #*  *#    .#+   .::..**  -#-  .#+  -#=   =#:    +#. =#:       :#+:     ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","  =#=--=##. ",".:","     #*  *#     #+  **---=##  -#-   .#+-#=    =#:    +#. **          :=**.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","  **.  .*#. ",".:.","   =#=  *#     #+ :#=   :##  -#-    :##=     -#-    +#. :#*:  .:  ::  .#=  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","   -+++--=      .==:   ==     =-  .=++=-==  :=:    .#=       -++=  -=    :=+++-. :=++=-   ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","                                                  .#+                                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|","                                                  *+                                      ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -HorizontalCenter $True
-    Write-Color -Text "|__________________________________________________________________________________________|" -Color White -BackgroundColor Black -HorizontalCenter $True
-    Write-Color -Text "Script: ","AutopilotOOBE Prep" -Color Yellow,White -HorizontalCenter $True -LinesBefore 1
-    Write-Color -Text "Author: " ,"Mark Newton" -Color Yellow,White -HorizontalCenter $True -LinesAfter 1
-    Write-Color -Text "Note: " ,"You can use Alt+Tab to switch to windows that get hidden behind OOBE" -Color Red,White -HorizontalCenter $True -LinesAfter 1
+    Write-Color -Text "__________________________________________________________________________________________" -Color White -BackgroundColor Black -Center $True
+    Write-Color -Text "|                                                                                          |" -Color White -BackgroundColor Black -Center $True
+    Write-Color -Text "|","                                            .-.                                           ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|","                                            -#-              -.    -+                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|","    ....           .       ...      ...     -#-  .          =#:..  .:      ...      ..    ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|","   +===*#-  ",".:","     #*  *#++==*#:   +===**:  -#- .#*    -#- =*#+++. +#.  -*+==+*. .*+-=*.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -Center $True
+    Write-Color -Text "|","    .::.+#  ",".:","     #*  *#    .#+   .::..**  -#-  .#+  -#=   =#:    +#. =#:       :#+:     ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -Center $True
+    Write-Color -Text "|","  =#=--=##. ",".:","     #*  *#     #+  **---=##  -#-   .#+-#=    =#:    +#. **          :=**.  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -Center $True
+    Write-Color -Text "|","  **.  .*#. ",".:.","   =#=  *#     #+ :#=   :##  -#-    :##=     -#-    +#. :#*:  .:  ::  .#=  ","|" -Color White,DarkBlue,Cyan,DarkBlue,White -BackgroundColor Black,Black,Black,Black,Black -Center $True
+    Write-Color -Text "|","   -+++--=      .==:   ==     =-  .=++=-==  :=:    .#=       -++=  -=    :=+++-. :=++=-   ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|","                                                  .#+                                     ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|","                                                  *+                                      ","|" -Color White,DarkBlue,White -BackgroundColor Black,Black,Black -Center $True
+    Write-Color -Text "|__________________________________________________________________________________________|" -Color White -BackgroundColor Black -Center $True
+    Write-Color -Text "Script: ","AutopilotOOBE Prep" -Color Yellow,White -Center $True -LinesBefore 1
+    Write-Color -Text "Author: " ,"Mark Newton" -Color Yellow,White -Center $True -LinesAfter 1
+    Write-Color -Text "Note: " ,"You can use Alt+Tab to switch to windows that get hidden behind OOBE" -Color Red,White -Center $True -LinesAfter 1
 
     Write-Color -Text "Preparing device for AutopilotOOBE" -Color White -ShowTime
 
@@ -325,12 +319,11 @@ try {
     Import-Module 'Microsoft.Graph.Identity.DirectoryManagement'
     Import-Module 'AutopilotOOBE'
 
-    Write-Color -Text "Starting AutopilotOOBE with configured parameters:" -Color White -ShowTime
     # Parameters to run AutopilotOOBE GUI with pre-filled fields
-    $Params = @{
+    $Params = [ordered]@{
         Title = 'Aunalytics Autopilot Registration'
         AssignedUserExample = 'username@aunalytics.com'
-        AddToGroup = 'AzPC-ENR-Enterprise'
+        AddToGroup = 'AzPC - ENR - Enterprise'
         AddToGroupOptions = 'AzPC - ENR - Enterprise','AzPC - ENR - Kiosk','AzPC - ENR - Shared'
         GroupTag = 'Enterprise'
         GroupTagOptions = 'Enterprise','Kiosk','Shared'
@@ -341,9 +334,14 @@ try {
         Docs = 'https://autopilotoobe.osdeploy.com/'
     }
 
+    Write-Color -Text "Starting AutopilotOOBE with configured parameters:" -Color White -ShowTime
     # Print the configured parameters to the screen
     ForEach ($Param in $Params.Keys) {
-        Write-Color -Text "$($Param): ","$($Params[$Param])" -Color Yellow,White -ShowTime
+        If ($Params[$Param].Count -gt 1) {
+            Write-Color -Text "$($Param): ","$($Params[$Param] -join ', ')" -Color Yellow,White -ShowTime
+        } Else {
+            Write-Color -Text "$($Param): ","$($Params[$Param])" -Color Yellow,White -ShowTime
+        }
     }
 
     Write-Color -Text " "
