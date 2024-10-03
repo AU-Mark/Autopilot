@@ -18,5 +18,6 @@ While ($True) {
   $screen_file = "$Path\" + $env:computername + "_" + $env:username + "_" + "$((get-date).tostring('yyyy.MM.dd-HH.mm.ss')).png"
   # Save the screenshot as a PNG file
   $image.Save($screen_file, [System.Drawing.Imaging.ImageFormat]::Png)
-  Start-Sleep 10
+  Write-Host "Screenshot saved to $screen_file. Sleeping for 5 seconds"
+  Start-Sleep 5
 }
